@@ -14,7 +14,6 @@ import pandas as pd
 from pandas.io.json import json_normalize
 import sqlalchemy
 from sqlalchemy import create_engine
-import summary_stats
 
 
 def json_to_df(input_path, output_path):
@@ -33,17 +32,15 @@ def json_to_df(input_path, output_path):
 
 def df_to_postgres(df, table):
     password = 'password'
-    database_name = 'cc_data_migration'
-    engine = sqlalchemy.create_engine("postgresql://postgres:" + password + "@localhost/" + database_name)
+	
+    engine = sqlalchemy.create_engine("postgresql://postgres:" + password + "@localhost/cc_data_migration")
     conn = engine.connect()
-
     engine.execute("CREATE TABLE IF NOT EXISTS " + table + "()")
     df.to_sql(table, engine, dtype = {'line_items': sqlalchemy.types.JSON}, if_exists = 'replace')
 
 def main(input, output_unzipped):
     df = json_to_df(input, output_unzipped)
     df_to_postgres(df, 'orders')
-    summary_stats.calc('order_stats')
 
 if __name__ == '__main__':
     input_log = sys.argv[1]
