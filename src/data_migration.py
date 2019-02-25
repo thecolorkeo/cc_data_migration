@@ -4,7 +4,6 @@
 '''
 Read in text from a .zip file in JSON
 and convert it to a table in Postgres.
-Also computes a summary table.
 '''
 
 import sys
@@ -13,7 +12,6 @@ import zipfile
 import json
 import pandas as pd
 from pandas.io.json import json_normalize
-#import psycopg2
 import sqlalchemy
 from sqlalchemy import create_engine
 
@@ -34,11 +32,11 @@ def json_to_df(input_path, output_path):
 
 def df_to_postgres(df, table):
     password = 'password'
-    engine = sqlalchemy.create_engine("postgresql://postgres:" + password + "@localhost/cc_data_migration")
+    database_name = 'cc_data_migration'
+    engine = sqlalchemy.create_engine("postgresql://postgres:" + password + "@localhost/" + database_name)
     conn = engine.connect()
     engine.execute("CREATE TABLE IF NOT EXISTS " + table + "()")
     df.to_sql(table, engine, dtype = {'line_items': sqlalchemy.types.JSON}, if_exists = 'replace')
-    #sql.write_frame(df, table, conn, flavor='postgresql')
 
 def main(input, output_unzipped):
     df = json_to_df(input, output_unzipped)
