@@ -8,5 +8,8 @@ Create an ETL (Extract, Transform, Load) so that API data is consumable by busin
 `data/data.zip`
 Collection of zipped json files.
 
-# Run
+# Solution
+First, I unzip json files into the unzipped folder. After that, I read them in and combine them into a single dataframe. I write that dataframe into Postgres. My program takes 2 arguments, which are the path to the zipped files (should be `/data/data.zip`) and the output folder (`/unzipped`).
 
+# Run
+Run with run.sh from the root directory.
