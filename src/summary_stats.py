@@ -10,6 +10,12 @@ JSON files into Postgres database.
 import sqlalchemy
 from sqlalchemy import create_engine
 
+'''
+@param table: table name to calc stats on
+Calculates average price paid for each
+user_id. In the future, more stats could
+be calculated using this framework.
+'''
 def calc(table):
     password = 'password'
     database_name = 'cc_data_migration'

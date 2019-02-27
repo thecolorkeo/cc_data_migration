@@ -16,7 +16,12 @@ import sqlalchemy
 from sqlalchemy import create_engine
 import summary_stats
 
-
+'''
+Reads in JSON files from input_path
+and converts them into pandas df.
+Combines all individual JSON files
+into a singular dataframe.
+'''
 def json_to_df(input_path, output_path):
     # unzip files into output_path folder
     unzipped = zipfile.ZipFile(input_path, 'r')
@@ -31,6 +36,10 @@ def json_to_df(input_path, output_path):
         results.append(pd.DataFrame(df.loc[0][0]))
     return pd.concat(results)
 
+'''
+Accepts a df and writes it to
+a table named table in postgres.
+'''
 def df_to_postgres(df, table):
     password = 'password'
     database_name = 'cc_data_migration'
@@ -40,6 +49,11 @@ def df_to_postgres(df, table):
     engine.execute("CREATE TABLE IF NOT EXISTS " + table + "()")
     df.to_sql(table, engine, dtype = {'line_items': sqlalchemy.types.JSON}, if_exists = 'replace')
 
+'''
+Reads in JSON files, concatenates
+them, writes them to postgres, and 
+calcs summary stats.
+'''
 def main(input, output_unzipped):
     df = json_to_df(input, output_unzipped)
     df_to_postgres(df, 'orders')
