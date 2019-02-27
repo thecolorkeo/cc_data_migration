@@ -7,8 +7,6 @@ Create an ETL (Extract, Transform, Load) so that API data is consumable by busin
 # Input file
 `data/data.zip`
 Collection of zipped json files. Each file is laid out as follows:
-The JSON files are laid out as follows:
-
 ```
 {
   "orders": [
