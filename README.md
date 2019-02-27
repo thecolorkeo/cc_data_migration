@@ -6,10 +6,43 @@ Create an ETL (Extract, Transform, Load) so that API data is consumable by busin
 
 # Input file
 `data/data.zip`
-Collection of zipped json files.
+Collection of zipped json files. Each file is laid out as follows:
+The JSON files are laid out as follows:
+
+```
+{
+  "orders": [
+    {
+      "id": 11748933635,
+      "email": "censored@censored.com",
+      "closed_at": null,
+      "created_at": "2017-10-30T19:58:29-04:00",
+      "updated_at": "2017-10-30T19:59:30-04:00",
+      "number": 97171,
+      "note": null,
+      "token": "censored",
+      "gateway": "cash",
+      "test": false,
+      "total_price": "130.64999999999998",
+...
+      "line_items": [
+        {
+          "id": 23495245827,
+          "variant_id": 36499702851,
+          "quantity": 1,
+          "product_id": 9096535107
+        }
+      ],
+      "total_discount": null
+    },
+  ]
+}
+```
 
 # Solution
 First, I unzip json files into the unzipped folder. After that, I read them in and combine them into a single dataframe. I write that dataframe into Postgres. My program takes 2 arguments, which are the path to the zipped files (should be `/data/data.zip`) and the output folder (`/unzipped`).
 
+After the table is written, I calculate a summary statistics table off of it with `summary_stats.py`. At the moment, the only stat calculated is the average price paid per transaction for each userid. This could be expanded to other statistics of choice.
+
 # Run
-Run with run.sh from the root directory.
+Run with `/run.sh` from the root directory.
